@@ -1,12 +1,12 @@
 <?php
 
-namespace StatamicRadPack\meilisearch\meilisearch;
+namespace StatamicRadPack\Meilisearch\Meilisearch;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use meilisearch\Client;
-use meilisearch\Exceptions\ApiException;
+use Meilisearch\Client;
+use Meilisearch\Exceptions\ApiException;
 use Statamic\Contracts\Search\Searchable;
-use Statamic\Entries\Entry;
 use Statamic\Search\Documents;
 use Statamic\Search\Index as BaseIndex;
 
@@ -14,11 +14,11 @@ class Index extends BaseIndex
 {
     protected $client;
 
-    public function __construct(Client $client, $name, $config)
+    public function __construct(Client $client, $name, array $config, string $locale = null)
     {
         $this->client = $client;
 
-        parent::__construct($name, $config);
+        parent::__construct($name, $config, $locale);
     }
 
     public function search($query)
@@ -37,7 +37,7 @@ class Index extends BaseIndex
 
     public function delete($document)
     {
-        $this->getIndex()->deleteDocument($this->getSafeDocmentID($document->getSearchReference()));
+        $this->getIndex()->deleteDocument($this->getSafeDocumentID($document->getSearchReference()));
     }
 
     public function exists()
@@ -83,6 +83,7 @@ class Index extends BaseIndex
             }
 
             $this->getIndex()->updateSettings($this->config['settings']);
+            $this->getIndex()->updatePagination($this->config['pagination'] ?? ['maxTotalHits' => 1000000]);
         } catch (ApiException $e) {
             $this->handlemeilisearchException($e, 'createIndex');
         }
@@ -108,12 +109,12 @@ class Index extends BaseIndex
         return $this;
     }
 
-    public function searchUsingApi($query, $filters = [], $options = [])
+    public function searchUsingApi($query, array $options = ['hitsPerPage' => 1000000, 'showRankingScore' => true]): Collection
     {
         try {
-            $searchResults = $this->getIndex()->search($query, $filters, $options);
+            $searchResults = $this->getIndex()->search($query, $options);
         } catch (\Exception $e) {
-            $this->handlemeilisearchException($e, 'searchUsingApi');
+            $this->handleMeilisearchException($e, 'searchUsingApi');
         }
 
         return collect($searchResults->getHits());
@@ -127,21 +128,23 @@ class Index extends BaseIndex
     private function getDefaultFields(Searchable $entry): array
     {
         return [
-            'id' => $this->getSafeDocmentID($entry->getSearchReference()),
+            'id' => $this->getSafeDocumentID($entry->getSearchReference()),
             'reference' => $entry->getSearchReference(),
         ];
     }
 
-    private function handlemeilisearchException($e, $method)
+    /**
+     * Custom error parsing for Meilisearch exceptions.
+     */
+    private function handleMeilisearchException($e, $method)
     {
-        // custom error parsing for meilisearch exceptions
+        // Ignore if already created.
         if ($e->errorCode === 'index_already_exists' && $method === 'createIndex') {
-            // ignore if already created
             return true;
         }
 
+        // Ignore if not found.
         if ($e->errorCode === 'index_not_found' && $method === 'deleteIndex') {
-            // ignore if not found
             return true;
         }
 
@@ -155,7 +158,7 @@ class Index extends BaseIndex
      *
      * @return string
      */
-    private function getSafeDocmentID(string $entryReference)
+    private function getSafeDocumentID(string $entryReference)
     {
         return Str::of($entryReference)
             ->explode('::')

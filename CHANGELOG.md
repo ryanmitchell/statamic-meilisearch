@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.1.0 (2023-11-27)
+
+### What's new
+
+* Site based indexes are now supported #28 #29 by @ryanmitchell
+
+## v3.0.3 (2023-11-02)
+
+### What's improved
+
+* Results will now be sorted using the search score from Meilisearch #26 by @robbanl
+
+## v3.0.2 (2023-10-17)
+
+### What's new
+
+* You can now use `maxTotalHits` and `hitsPerPage` options when configuring indexes #24 by @ryanmitchell
+
+## v3.0.1 (2023-10-17)
+
+### What's fixed
+
+* Fixed typo in the package name #23 by @ryanmitchell
+
 ## v3.0.0 (2023-10-16)
 
 The meilisearch addon is now part of [The Rad Pack](https://github.com/statamic-rad-pack). As part of this, please run the following commands when upgrading:
