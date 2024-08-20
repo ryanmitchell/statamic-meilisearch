@@ -5,8 +5,8 @@ This addon provides a [Meilisearch](https://www.meilisearch.com/) search driver 
 ## Requirements
 
 * PHP 8.1+
-* Laravel 9+
-* Statamic 4
+* Laravel 10+
+* Statamic 5
 * Meilisearch 1.0+
 
 ### Installation
@@ -63,6 +63,12 @@ window.meilisearch = new meilisearch({
     apiKey: '{{ config:statamic:search:drivers:meilisearch:credentials:search_api_key }}',
 });
 </script>
+```
+
+You can optionally publish the config file for this package using:
+
+```
+php artisan vendor:publish --tag=statamic-meilisearch-config
 ```
 
 ### Few words about Document IDs in meilisearch

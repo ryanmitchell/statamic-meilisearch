@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.3.0 - 2024-05-14
+
+### What's Changed
+
+* Community Health Files by @duncanmcclean in https://github.com/statamic-rad-pack/meilisearch/pull/34
+* Add Statamic 5 support by @godismyjudge95 in https://github.com/statamic-rad-pack/meilisearch/pull/38
+
+### New Contributors
+
+* @godismyjudge95 made their first contribution in https://github.com/statamic-rad-pack/meilisearch/pull/38
+
+**Full Changelog**: https://github.com/statamic-rad-pack/meilisearch/compare/v3.2.1...v3.3.0
+
+## v3.2.1 - 2023-12-18
+
+### What's Changed
+
+* Fixed inserting single documents by @naabster in https://github.com/statamic-rad-pack/meilisearch/pull/33
+
+### New Contributors
+
+* @naabster made their first contribution in https://github.com/statamic-rad-pack/meilisearch/pull/33
+
+**Full Changelog**: https://github.com/statamic-rad-pack/meilisearch/compare/v3.2.0...v3.2.1
+
+## v3.2.0 - 2023-12-14
+
+### What's Changed
+
+* Use lazy indexing/updating for performance and reduced memory usage by @ryanmitchell in https://github.com/statamic-rad-pack/meilisearch/pull/31
+
+**Full Changelog**: https://github.com/statamic-rad-pack/meilisearch/compare/v3.1.0...v3.2.0
+
 ## v3.1.0 (2023-11-27)
 
 ### What's new
@@ -150,6 +183,9 @@ In consultation with @tao, I have revised the adapter, and we present the first 
         'collection' => fn($collection) => $collection?->handle(),
     ],
  ],
+
+
+
 
 
 
